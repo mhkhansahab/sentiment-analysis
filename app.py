@@ -1,16 +1,16 @@
 from flask import Flask
 from flask import request
+from flask import Response
 from textblob import TextBlob
 import json
 import os
 from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app, resources={r"/analyze": {"origins": "*"}})
 
 def analyze(data):
-    text = data
-    blob = TextBlob(text)
+    blob = TextBlob(data)
     return blob.sentiment
 
 @app.route('/analyze', methods=['POST'])
@@ -22,7 +22,10 @@ def sentimentAnalyzer():
           "polarity" : analyzed.polarity,
           "subjectivity" : analyzed.subjectivity
       }
-      return json.dumps(dict)
+      resp = Response(json.dumps(dict))
+      resp.headers['Access-Control-Allow-Origin'] = '*'
+      resp.headers['Content-Type'] = 'application/json'
+      return resp
 
 port = int(os.environ.get('PORT', 8000))
 
