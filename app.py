@@ -3,14 +3,19 @@ from flask import request
 from textblob import TextBlob
 import json
 import os
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 def analyze(data):
     text = data
     blob = TextBlob(text)
     return blob.sentiment
 
 @app.route('/analyze', methods=['POST'])
+@cross_origin()
 def sentimentAnalyzer():
     if request.method == 'POST':
       data = json.loads(request.get_data())
