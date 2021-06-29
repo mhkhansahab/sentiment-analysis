@@ -24,7 +24,7 @@ def sentimentAnalyzer():
           "polarity" : analyzed.polarity,
           "subjectivity" : analyzed.subjectivity
       }
-      return dict
+      return json.dump(dict)
 
 port = int(os.environ.get('PORT', 8000))
 
